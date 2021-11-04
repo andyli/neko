@@ -1,0 +1,10 @@
+*
+!boot
+!cmake
+!libs
+!src
+!vm
+!CMakeLists.txt
+!CHANGES
+!LICENSE
+!README.md
