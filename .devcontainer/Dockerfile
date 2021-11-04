@@ -62,5 +62,9 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+ARG TARGETARCH
+RUN wget https://github.com/earthly/earthly/releases/download/v0.5.24/earthly-linux-${TARGETARCH} -O /usr/local/bin/earthly \
+    && chmod +x /usr/local/bin/earthly
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
