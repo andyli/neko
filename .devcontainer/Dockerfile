@@ -62,5 +62,12 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+# install bazel
+ENV USE_BAZEL_VERSION=4.2.1
+ARG TARGETARCH
+RUN wget https://github.com/bazelbuild/bazelisk/releases/download/v1.10.1/bazelisk-linux-${TARGETARCH} -O /usr/local/bin/bazel \
+    && chmod +x /usr/local/bin/bazel \
+    && bazel version
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
