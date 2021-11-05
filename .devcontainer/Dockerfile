@@ -15,7 +15,7 @@ COPY library-scripts/*.sh /tmp/library-scripts/
 RUN apt-get update \
     && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
     # Use Docker script from script library to set things up
-    && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}" \
+    && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}" "${USE_MOBY}" \
     # Clean up
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 
@@ -38,7 +38,6 @@ RUN apt-get update \
         software-properties-common \
         direnv \
         tzdata \
-        python3-pip \
         # Neko deps
         cmake \
         ninja-build \
@@ -65,6 +64,7 @@ RUN apt-get update \
 ARG TARGETARCH
 RUN wget https://github.com/earthly/earthly/releases/download/v0.5.24/earthly-linux-${TARGETARCH} -O /usr/local/bin/earthly \
     && chmod +x /usr/local/bin/earthly
+RUN earthly bootstrap --no-buildkit --with-autocomplete
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
