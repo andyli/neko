@@ -82,6 +82,7 @@ update-devcontainer-refs:
     BUILD --build-arg FILE=./.devcontainer/docker-compose.yml +update-devcontainer-ref
 
 update-devcontainer-ref:
+    FROM busybox:1.34
     WORKDIR /tmp
     ARG FILE
     COPY $FILE file.o
