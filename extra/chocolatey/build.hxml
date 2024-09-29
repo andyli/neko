@@ -1,0 +1,3 @@
+--library format:3.7.0
+--main Build
+--neko build.n

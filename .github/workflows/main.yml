@@ -197,10 +197,23 @@ jobs:
           name: windows64-vs2017-binaries
           path: windows64-vs2017-binaries
 
+      - name: Move binaries
+        run: |
+          mv windows-vs2017-binaries\neko-*-win.zip .\extra\chocolatey\
+          mv windows64-vs2017-binaries\neko-*-win64.zip .\extra\chocolatey\
+
+      - name: Install Haxe
+        run: |
+          choco install haxe -y
+          echo NEKOPATH="C:\ProgramData\chocolatey\lib\neko\neko-$(neko -version)-win64" >> $env:GITHUB_ENV
+
       - name: Prepare Chocolatey Package
         run: |
-          .\extra\chocolatey\generatePackage.ps1 $env:NEKO_VERSION
-          Get-ChildItem extra\chocolatey\out
+          haxelib newrepo
+          haxelib install build.hxml --always --quiet
+          haxe build.hxml
+          neko build.n $env:NEKO_VERSION
+        working-directory: extra/chocolatey/
 
       - name: Format package version string
         run: |
@@ -212,8 +225,8 @@ jobs:
           echo chocoVersion=$chocoVersion >> $env:GITHUB_ENV
 
       - name: choco pack
-        run: choco pack --version $env:chocoVersion -Out ..\pack
-        working-directory: extra/chocolatey/out/
+        run: choco pack --version $env:chocoVersion -Out .\pack
+        working-directory: extra/chocolatey/
 
       - name: Upload package
         uses: actions/upload-artifact@v4

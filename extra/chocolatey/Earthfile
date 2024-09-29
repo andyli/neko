@@ -1,0 +1,39 @@
+VERSION 0.8
+FROM ubuntu:jammy
+
+neko-win.zip:
+    FROM curlimages/curl:8.10.1
+    WORKDIR /tmp
+    ARG --required NEKO_VERSION
+    RUN curl -fsSLO "https://github.com/HaxeFoundation/neko/releases/download/v${NEKO_VERSION//./-}/neko-${NEKO_VERSION}-win.zip"
+    SAVE ARTIFACT "neko-${NEKO_VERSION}-win.zip" AS LOCAL .
+
+neko-win64.zip:
+    FROM curlimages/curl:8.10.1
+    WORKDIR /tmp
+    ARG --required NEKO_VERSION
+    RUN curl -fsSLO "https://github.com/HaxeFoundation/neko/releases/download/v${NEKO_VERSION//./-}/neko-${NEKO_VERSION}-win64.zip"
+    SAVE ARTIFACT "neko-${NEKO_VERSION}-win64.zip" AS LOCAL .
+
+neko-archives:
+    ARG --required NEKO_VERSION
+    BUILD --pass-args +neko-win.zip
+    BUILD --pass-args +neko-win64.zip
+
+build.n:
+    FROM haxe:4.3.6-alpine
+    COPY build.hxml Build.hx .
+    RUN haxelib install build.hxml --always --quiet
+    RUN haxe build.hxml
+    SAVE ARTIFACT build.n AS LOCAL .
+
+build:
+    FROM +build.n
+    ARG --required NEKO_VERSION
+    COPY --pass-args +neko-win.zip/* +neko-win64.zip/* .
+    COPY chocolateyInstall.ps1.template neko.nuspec.template .
+    RUN neko build.n "$NEKO_VERSION"
+    SAVE ARTIFACT chocolateyInstall.ps1 AS LOCAL .
+    SAVE ARTIFACT neko.nuspec AS LOCAL .
+    SAVE ARTIFACT neko-*.zip AS LOCAL .
+    SAVE ARTIFACT LICENSE AS LOCAL .

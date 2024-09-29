@@ -3,10 +3,10 @@ $packDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 Install-ChocolateyZipPackage `
     -PackageName 'neko' `
     -UnzipLocation "$packDir" `
-    -Url "$packDir\neko-*-win.zip" `
+    -Url "$packDir\neko-::VERSION::-win.zip" `
     -Checksum '::CHECKSUM32::' `
     -ChecksumType 'sha256' `
-    -Url64bit "$packDir\neko-*-win64.zip" `
+    -Url64bit "$packDir\neko-::VERSION::-win64.zip" `
     -Checksum64 '::CHECKSUM64::' `
     -ChecksumType64 'sha256'
 

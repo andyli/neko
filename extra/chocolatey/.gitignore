@@ -1,0 +1,8 @@
+*.zip
+*.nupkg
+*.n
+.haxelib
+.tmp-earthly-out
+neko.nuspec
+chocolateyInstall.ps1
+LICENSE

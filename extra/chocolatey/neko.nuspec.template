@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>neko</id>
-        <version>0.0.0</version>
+        <version>::VERSION::</version>
         <title>Neko</title>
         <authors>Haxe Foundation</authors>
         <owners>Haxe Foundation</owners>
@@ -23,4 +23,12 @@
             <dependency id="vcredist2017" version="14.16.27033" />
         </dependencies>
     </metadata>
+    <files>
+        <file src="neko-::VERSION::-win.zip" />
+        <file src="neko-::VERSION::-win64.zip" />
+        <file src="LICENSE" />
+        <file src="VERIFICATION.txt" />
+        <file src="chocolateyInstall.ps1" />
+        <file src="chocolateyUninstall.ps1" />
+    </files>
 </package>
